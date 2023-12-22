@@ -64,6 +64,7 @@ type Signer struct {
 	Contract    common.Address
 	Paymaster   *contracts.VerifyingPaymaster
 	PrivateKey  *ecdsa.PrivateKey
+	CreateGas   *big.Int
 	MaxGas      *big.Int
 	MaxVipGas   *big.Int
 	VipContract *contracts.VipNFT
@@ -289,6 +290,9 @@ func (s *Signer) Pm_requestGas(addr string) (bool, error) {
 			return false, errors.New("frequent requests")
 		}
 	} else {
+		if lastVip == -1 {
+			gas = s.CreateGas
+		}
 		account = &models.Account{
 			Address: strings.ToLower(addr),
 			Enable:  true,
