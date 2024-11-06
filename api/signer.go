@@ -92,6 +92,7 @@ func NewSigner(con container.Container) (*Signer, error) {
 	if err != nil {
 		return nil, err
 	}
+	createGas, _ := new(big.Int).SetString(conf.CreateGas, 10)
 	maxGas, _ := new(big.Int).SetString(conf.MaxGas, 10)
 
 	vipContract, err := contracts.NewVipNFT(common.HexToAddress(conf.VipContract), rpc)
@@ -106,6 +107,7 @@ func NewSigner(con container.Container) (*Signer, error) {
 		Contract:    contract,
 		Paymaster:   paymaster,
 		PrivateKey:  privKey,
+		CreateGas:   createGas,
 		MaxGas:      maxGas,
 		VipContract: vipContract,
 		MaxVipGas:   maxVipGas,

@@ -12,7 +12,6 @@ import (
 	"github.com/ethereum/go-ethereum"
 	"github.com/ethereum/go-ethereum/accounts/abi"
 	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/common/hexutil"
 	"github.com/ethereum/go-ethereum/ethclient"
 	"github.com/ethereum/go-ethereum/rpc"
 
@@ -221,7 +220,7 @@ func estimate(
 	if err != nil {
 		return nil, nil, nil, err
 	}
-	data, err := client.CallContract(
+	_, err = client.CallContract(
 		context.Background(),
 		ethereum.CallMsg{
 			From: common.BigToAddress(common.Big0),
@@ -230,13 +229,6 @@ func estimate(
 		},
 		nil,
 	)
-	if err != nil {
-		return nil, nil, nil, err
-	}
-	err = &revertError{
-		reason: hexutil.Encode(data),
-	}
-
 	sim, simErr := NewExecutionResult(err)
 	if simErr != nil {
 		fo, foErr := NewFailedOp(err)
